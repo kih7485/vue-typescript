@@ -1,20 +1,47 @@
 <template>
   <div>
-    <h1>Vue Todo with Typescript</h1>
-    <TodoInput :item="todoText" @input="updateTodoText" @add="addTodoItem"></TodoInput>
+    <header>
+       <h1>Vue Todo with Typescript</h1>
+    </header>
+   <main>
+     <TodoInput :item="todoText" @input="updateTodoText" @add="addTodoItem"></TodoInput>
+     <div>
+       <ul>
+         <TodoListItem v-for="(todoItem, index) in todoItems" :key="index" :todoItem="todoItem"></TodoListItem>
+       </ul>
+     </div>
+   </main>
+    
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import TodoInput from "./components/TodoInput.vue";
+import TodoListItem from "./components/TodoListItem.vue";
+
+const STORAGE_KEY = "vue-todo-list-v1";
+const storage = {
+  save(todoItems: any[]){ 
+    const parsed = JSON.stringify(todoItems);
+    localStorage.setItem(STORAGE_KEY, parsed);
+  },
+  fetch(){
+    const todoItems = localStorage.getItem(STORAGE_KEY) ?? "[]";
+    const result = JSON.parse(todoItems);
+
+    return result;
+  }
+}
 export default Vue.extend({
   components: {
-    TodoInput
+    TodoInput,
+    TodoListItem
   },
   data(){
     return {
-      todoText: ""
+      todoText: "",
+      todoItems: [] as any[] 
     };
   },
   methods: {
@@ -23,12 +50,20 @@ export default Vue.extend({
     },
     addTodoItem(){
       const text = this.todoText;
-      localStorage.setItem(text, text); 
+      this.todoItems.push(text);
+      storage.save(this.todoItems);
+      // localStorage.setItem(text, text); 
       this.initTodoText();
     },
     initTodoText(){
       this.todoText = ""
+    },
+    fetchTodoItems(){
+       this.todoItems = storage.fetch();
     }
+  },
+  created(){
+    this.fetchTodoItems();
   }
 });
 </script>
