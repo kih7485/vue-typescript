@@ -22,7 +22,6 @@
                 this.$emit('add', this.item)
             },
             handleInput(event: InputEvent) {
-                console.log(event);
                 const eventTarget = event.target as HTMLInputElement;
                 this.$emit('input', eventTarget.value);
             }

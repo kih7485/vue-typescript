@@ -7,7 +7,7 @@
      <TodoInput :item="todoText" @input="updateTodoText" @add="addTodoItem"></TodoInput> 
      <div>
        <ul>
-         <TodoListItem v-for="(todoItem, index) in todoItems" :key="index" :index="index" :todoItem="todoItem" @remove="removeTodoItem"></TodoListItem>
+         <TodoListItem v-for="(todoItem, index) in todoItems" :key="index" :index="index" :todoItem="todoItem" @remove="removeTodoItem" @toggle="toggleTodoItemComplete"></TodoListItem>
        </ul>
      </div>
    </main>
@@ -33,6 +33,10 @@ const storage = {
     return result;
   }
 }
+export interface Todo{
+   title: string;
+   done: boolean;
+}
 export default Vue.extend({
   components: {
     TodoInput,
@@ -41,7 +45,7 @@ export default Vue.extend({
   data(){
     return {
       todoText: "",
-      todoItems: [] as any[] 
+      todoItems: [] as Todo[] 
     };
   },
   methods: {
@@ -50,7 +54,11 @@ export default Vue.extend({
     },
     addTodoItem(){
       const text = this.todoText;
-      this.todoItems.push(text);
+      const todo: Todo = {
+        title: text,
+        done: false
+      };
+      this.todoItems.push(todo);
       storage.save(this.todoItems);
       // localStorage.setItem(text, text); 
       this.initTodoText();
@@ -60,6 +68,13 @@ export default Vue.extend({
     },
     fetchTodoItems(){
        this.todoItems = storage.fetch();
+    },
+    toggleTodoItemComplete(todoItem: Todo,index: number){
+      this.todoItems.splice(index, 1, {
+        ...todoItem,
+        done: !todoItem.done
+      });
+      storage.save(this.todoItems);
     },
     removeTodoItem(index: number){ 
       console.log("remove", index);
