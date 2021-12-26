@@ -22,11 +22,11 @@ import TodoListItem from "./components/TodoListItem.vue";
 
 const STORAGE_KEY = "vue-todo-list-v1";
 const storage = {
-  save(todoItems: any[]){ 
+  save(todoItems: Todo[]) : void{ 
     const parsed = JSON.stringify(todoItems);
     localStorage.setItem(STORAGE_KEY, parsed);
   },
-  fetch(){
+  fetch(): Todo[]{
     const todoItems = localStorage.getItem(STORAGE_KEY) ?? "[]";
     const result = JSON.parse(todoItems);
 
@@ -66,8 +66,12 @@ export default Vue.extend({
     initTodoText(){
       this.todoText = ""
     },
-    fetchTodoItems(){
-       this.todoItems = storage.fetch();
+    fetchTodoItems(){ 
+       this.todoItems = storage.fetch().sort((a,b) => {
+         if(a.title < b.title) { return -1 }
+         if(a.title > b.title) { return 1 }
+         return 0;
+       }) ;
     },
     toggleTodoItemComplete(todoItem: Todo,index: number){
       this.todoItems.splice(index, 1, {
