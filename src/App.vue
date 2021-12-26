@@ -4,10 +4,10 @@
        <h1>Vue Todo with Typescript</h1>
     </header>
    <main>
-     <TodoInput :item="todoText" @input="updateTodoText" @add="addTodoItem"></TodoInput>
+     <TodoInput :item="todoText" @input="updateTodoText" @add="addTodoItem"></TodoInput> 
      <div>
        <ul>
-         <TodoListItem v-for="(todoItem, index) in todoItems" :key="index" :todoItem="todoItem"></TodoListItem>
+         <TodoListItem v-for="(todoItem, index) in todoItems" :key="index" :index="index" :todoItem="todoItem" @remove="removeTodoItem"></TodoListItem>
        </ul>
      </div>
    </main>
@@ -60,6 +60,11 @@ export default Vue.extend({
     },
     fetchTodoItems(){
        this.todoItems = storage.fetch();
+    },
+    removeTodoItem(index: number){ 
+      console.log("remove", index);
+      this.todoItems.splice(index, 1);
+      storage.save(this.todoItems);
     }
   },
   created(){
