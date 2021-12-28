@@ -1,30 +1,34 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="app">
+      <p>{{name}}</p>
+      <button @click="changeName('kih')"> change name</button>
   </div>
-  <router-view/>
-</template>
+</template> 
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { defineComponent } from 'vue'
 
-#nav {
-  padding: 30px;
-}
+export default defineComponent({
+  name: 'App',
+  components: {},
+  data(){
+    return {
+      name: 'Link'
+    }
+  },
+  methods:{
+    changeName(name: string){
+      this.name = name;
+    }
+  },
+  setup () {
+    
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+    return {}
+  }
+})
+</script>
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style scoped>
+
 </style>
