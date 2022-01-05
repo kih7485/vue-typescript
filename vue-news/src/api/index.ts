@@ -6,7 +6,7 @@ const api = {
   user: "https://api.hnpwa.com/v0/user/",
   item: "https://api.hnpwa.com/v0/item/",
 };
-interface NewsItem {
+export interface NewsItem {
   comments_count: number;
   domain: string;
   id: number;
