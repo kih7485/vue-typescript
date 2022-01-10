@@ -5,14 +5,17 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
+import Vue, { VueConstructor } from "vue";
 // import Chart from "chart.js/auto";
 
-export default Vue.extend({
+export default (
+  Vue as VueConstructor<Vue & { $refs: { my: HTMLDivElement } }>
+).extend({
   mounted() {
-    const canvasElement = document.getElementById(
-      "myChart"
-    ) as HTMLCanvasElement;
+    // const canvasElement = document.getElementById(
+    //   "myChart"
+    // ) as HTMLCanvasElement;
+    const canvasElement = this.$refs.myChart;
     const ctx = canvasElement.getContext("2d");
     if (!ctx) {
       return;
